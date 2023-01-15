@@ -1,8 +1,7 @@
 'use strict';
 
 
-import Menu from './menu.json';
-console.log('menu from json ', Menu);
+
 
 const coursesEn = ["Hamburger, cream sauce and poiled potates",
                 "Goan style fish curry and whole grain rice",
