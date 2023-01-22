@@ -1,34 +1,103 @@
 
+import Sodexo from "./modules/sodexo-data";
+import Fazer from "./modules/fazer-data";
 
-const nameBt = document.getElementById("submit");
-nameBt.onclick = ()=> {
-let name = $(".inputNumber").val();
- const regexp = /^[A-Z]{1}[a-z]{4,64}[0-9]{1}[()/;,]{1,10}$/;
- let output = regexp.test(name);
- console.log(output);
+// Global variables
+let lang = 'fi';
+let menuContainers = [];
+let activeMenus = [];
+
+
+/**
+ * Renders menu content to html page
+ * @param {Array} menu - array of dishes
+ */
+const renderMenu = (menu, targetElem) => {
+  const menuContainer = targetElem;
+  menuContainer.innerHTML = '';
+  const list = document.createElement('ul');
+  for (const dish of menu) {
+    const li = document.createElement('li');
+    li.textContent = dish;
+    list.append(li);
+  }
+  menuContainer.append(list);
 };
 
-const menu = [
-  {name: 'Lingonberry jam', price: 4.00},
-  {name: 'Mushroom and bean casserole', price: 5.50},
-  {name: 'Chili-flavoured wheat', price: 3.00},
-  {name: 'Vegetarian soup', price: 4.80},
-  {name: 'Pureed root vegetable soup with smoked cheese', price: 8.00}
-];
+/**
+ * Sorts menu alphapetically
+ * @param {Array} menu - Array of dishes
+ * @param {string} order - 'asc' or 'desc'
+ * @returns sorted menu array
+ */
+const sortMenu = (menu, order = 'asc') => {
+  // create a copy of the menu for sorting
+  // don't change the original arrays's order
+  menu = [...menu];
+  menu.sort();
+  if (order === 'desc') {
+    menu.reverse();
+  }
+  return menu;
+};
 
-const sortedMenu = menu.sort((a,b) => {
-  return a.price - b.price;
+/**
+ * Change UI language
+ * @param {string} language
+ */
+const changeLanguage = (language) => {
+  if (language === 'fi') {
+    activeMenus[0] = Sodexo.coursesFi;
+    activeMenus[1] = Fazer.coursesFi;
+  } else if (language === 'en') {
+    activeMenus[0] = Sodexo.coursesEn;
+    activeMenus[1] = Fazer.coursesEn;
+  }
+  lang = language;
+  for(const [index, menu]  of activeMenus.entries()){
+    renderMenu(menu, menuContainers[index]);
+    }
+
+};
+
+/**
+ * Get a random dish fron an array
+ * @param {Array} menu - Array of dishes
+ * @returns random dish item
+ */
+const getRandomDish = (menu) => {
+  const randomIndex = Math.floor(Math.random() * menu.length);
+  return menu[randomIndex];
+};
+
+/**
+ * Buttons & event handlers
+ */
+const sortButton = document.querySelector('#sort-button');
+sortButton.addEventListener('click', () => {
+  renderMenu(sortMenu(activeMenus[0]));
 });
-console.log(sortedMenu);
+const langButton = document.querySelector('#lang-button');
+langButton.addEventListener('click', () => {
+  if (lang === 'fi') {
+    changeLanguage('en');
+  } else {
+    changeLanguage('fi');
+  }
+});
+const randButton = document.querySelector('#rand-button');
+randButton.addEventListener('click', () => {
+  alert(getRandomDish(activeMenus[0]));
+});
 
-const filtered = menu.filter(menu=> menu.price < 5);
-console.log(filtered);
-
-const maped = menu.map(menu => menu.price*1.15);
-console.log(maped);
-
-let guessLeft=10;
-let guesscount = 0;
-
-const totalprice = menu.reduce((acc, current) => acc + current.price, 0);
-console.log(totalprice);
+/**
+ * App initaliazation
+ */
+const init = () => {
+  activeMenus = [Sodexo.coursesFi, Fazer.coursesFi];
+  menuContainers = document.querySelectorAll('.menu-container');
+  for(const [index, menu]  of activeMenus.entries()){
+  renderMenu(menu, menuContainers[index]);
+  }
+};
+init();

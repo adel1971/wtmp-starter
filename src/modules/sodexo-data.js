@@ -1,0 +1,9 @@
+import Menu from '../mock-data/sodexo.json';
+// console.log('menu from json', Menu);
+
+// Convert Menu.courses object to array and extract title_* values only
+const coursesEn = Object.values(Menu.courses).map((course) => course.title_en);
+const coursesFi = Object.values(Menu.courses).map((course) => course.title_fi);
+
+const Sodexo = {coursesEn, coursesFi};
+export default Sodexo;
