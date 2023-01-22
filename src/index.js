@@ -1,102 +1,54 @@
-'use strict';
 
 
+let guessLeft=10;
+let guesscount = 0;
 
+let targetNum;
+targetNum = Math.floor((Math.random()*100)+1);
+console.log(targetNum);
+const startTime = Math.round(Date.now()/1000);
+const guessBt = document.getElementById("submit");
+const numberGuess = new Set();
+guessBt.onclick = () =>{
 
-const coursesEn = ["Hamburger, cream sauce and poiled potates",
-                "Goan style fish curry and whole grain rice",
-                "Vegan Chili sin carne and whole grain rice",
-                "Broccoli puree soup, side salad with two napas",
-                "Lunch baguette with BBQ-turkey filling",
-                "Cheese / Chicken / Vege / Halloum burger and french fries"];
-const coursesFi = ["Jauhelihapihvi, ruskeaa kermakastiketta ja keitettyä perunaa",
-                "Goalaista kalacurrya ja täysjyväriisiä",
-                "vegaani Chili sin carne ja täysjyväriisi",
-                "Parsakeittoa,lisäkesalaatti kahdella napaksella",
-                "Lunch baguette with BBQ-turkey filling",
-                "Juusto / Kana / Kasvis / Halloumi burgeri ja ranskalaiset"];
+    guesscount++;
+    let result = parseInt($(".inputNumber").val());
 
+    numberGuess.add(result);
+  if(result>targetNum){
+    $("#result").css("color","red");
+    $("#result").text("Very Bad Not Even Close");
+  } else if(result < targetNum){
+    $("#result").css("color","blue");
+    $("#result").text("Almost There!");
+  } else if(result == targetNum){
+    const endTime = Math.round(Date.now()/1000 );
 
-let long = 'fi';
-let activeMenu = coursesFi;
+    const timeguess = endTime - startTime;
+    $("#result").css("color","green");
+    $("#result").text(" Very good at guessing! The number was: " + targetNum +
+    " total number of guesses: " + guesscount + "  total time spent guessing: " + timeguess +" sec" ) ;
+  } else {
+    $("#result").text("Please re input with an actual number -_-");
+  }
 
-/**
- * Renders menu content to html page
- * @param {Array} menu - array of dishes
- */
+  guessLeft--;
+  if (guessLeft >= 0) {
 
-const renderMenu = (menu) => {
-  const menuBox = document.querySelector('.menu-box');
-  menuBox.innerHTML ='';
- const list = document.createElement('ul');
- for(const dish of menu ){
-  const li = document.createElement('li');
-  li.textContent = dish;
-  list.append(li);
- }
- menuBox.append(list);
+      if (result === targetNum) {
+        alert("Winner winner!");
+        console.log(numberGuess);
+
+      }else if (result > targetNum) {
+
+        alert("Please guess lower. You have " + guessLeft + " guesses remaining.");
+
+      }else{
+
+        alert("Please guess higher. You have " + guessLeft + " guesses remaining.");
+      }
+
+    }else{
+      alert("MUh hahahahah you lose!");
+    }
 };
-
-renderMenu(activeMenu);
-
-/**
- * Sorts menu alphanpetically
- * @param {Array} menu - Array of dishes
- * @param {string} order  - 'asc' or 'desc'
- * @returns sorted menu array
- */
-const sortMenu = (menu, order='asc') => {
-
-   menu.sort();
-   if (order === 'desc'){
-     menu.reverse();
-   }
-    return menu;
-   };
-
-   /**
-    * Change UI language
-    * @param {*}  value
-    */
-
-
-   const enLang = document.querySelector('#en-button');
-   const fiLang = document.querySelector('#fi-button');
-   enLang.addEventListener('click', () => {
-    let value = enLang.value;
-     console.log(value);
-
-      renderMenu(coursesEn);
-    } );
-    fiLang.addEventListener('click', () => {
-      let value = fiLang.value;
-      console.log(value);
-
-       renderMenu(coursesFi);
-     } );
-
-
-
-
-    /**
-     * Get a random dish item from an array
-     * @param {*} menu  - Array of dishes
-     * @returns Random dish item
-     */
-
-   const getRandomDish = (menu) => {
-     const randomIndex = Math.floor(Math.random() * menu.length);
-     return menu[randomIndex];
-   };
-
-
-
-  const sortButton = document.querySelector('#sort-button');
-  sortButton.addEventListener('click', () => {
-   renderMenu(sortMenu(activeMenu)) ;
-  });
-
-
-   // TODO: Add a button for changing the language of the menu
-
-   // TODO: Add a button that picks a random dish from the array and displays it
