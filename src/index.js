@@ -1,54 +1,34 @@
 
 
+const nameBt = document.getElementById("submit");
+nameBt.onclick = ()=> {
+let name = $(".inputNumber").val();
+ const regexp = /^[A-Z]{1}[a-z]{4,64}[0-9]{1}[()/;,]{1,10}$/;
+ let output = regexp.test(name);
+ console.log(output);
+};
+
+const menu = [
+  {name: 'Lingonberry jam', price: 4.00},
+  {name: 'Mushroom and bean casserole', price: 5.50},
+  {name: 'Chili-flavoured wheat', price: 3.00},
+  {name: 'Vegetarian soup', price: 4.80},
+  {name: 'Pureed root vegetable soup with smoked cheese', price: 8.00}
+];
+
+const sortedMenu = menu.sort((a,b) => {
+  return a.price - b.price;
+});
+console.log(sortedMenu);
+
+const filtered = menu.filter(menu=> menu.price < 5);
+console.log(filtered);
+
+const maped = menu.map(menu => menu.price*1.15);
+console.log(maped);
+
 let guessLeft=10;
 let guesscount = 0;
 
-let targetNum;
-targetNum = Math.floor((Math.random()*100)+1);
-console.log(targetNum);
-const startTime = Math.round(Date.now()/1000);
-const guessBt = document.getElementById("submit");
-const numberGuess = new Set();
-guessBt.onclick = () =>{
-
-    guesscount++;
-    let result = parseInt($(".inputNumber").val());
-
-    numberGuess.add(result);
-  if(result>targetNum){
-    $("#result").css("color","red");
-    $("#result").text("Very Bad Not Even Close");
-  } else if(result < targetNum){
-    $("#result").css("color","blue");
-    $("#result").text("Almost There!");
-  } else if(result == targetNum){
-    const endTime = Math.round(Date.now()/1000 );
-
-    const timeguess = endTime - startTime;
-    $("#result").css("color","green");
-    $("#result").text(" Very good at guessing! The number was: " + targetNum +
-    " total number of guesses: " + guesscount + "  total time spent guessing: " + timeguess +" sec" ) ;
-  } else {
-    $("#result").text("Please re input with an actual number -_-");
-  }
-
-  guessLeft--;
-  if (guessLeft >= 0) {
-
-      if (result === targetNum) {
-        alert("Winner winner!");
-        console.log(numberGuess);
-
-      }else if (result > targetNum) {
-
-        alert("Please guess lower. You have " + guessLeft + " guesses remaining.");
-
-      }else{
-
-        alert("Please guess higher. You have " + guessLeft + " guesses remaining.");
-      }
-
-    }else{
-      alert("MUh hahahahah you lose!");
-    }
-};
+const totalprice = menu.reduce((acc, current) => acc + current.price, 0);
+console.log(totalprice);
