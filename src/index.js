@@ -1,103 +1,49 @@
+/* Task_1_i */
+ // the 'official' secret Code sequence
+  var secretCode = ['h', 'e', 'l', 'l', 'o'];
+  // a variable to remember the 'position' the user has reached so far.
+  var secretCodePosition = 0;
+  // add keydown event listener
+  document.addEventListener('keydown', (evt)=> {
+    // get  the key  which pressed
+    let keys = evt.key;
+    // get the value of the required key from the secret code
+    let requiredKey = secretCode[secretCodePosition];
+    console.log(evt.key);
+    // compare the key with the required key
+    if (keys === requiredKey) {
 
-import Sodexo from "./modules/sodexo-data";
-import Fazer from "./modules/fazer-data";
+      // move to the next key in the secret code sequence
+      secretCodePosition++;
 
-// Global variables
-let lang = 'fi';
-let menuContainers = [];
-let activeMenus = [];
-
-
-/**
- * Renders menu content to html page
- * @param {Array} menu - array of dishes
- */
-const renderMenu = (menu, targetElem) => {
-  const menuContainer = targetElem;
-  menuContainer.innerHTML = '';
-  const list = document.createElement('ul');
-  for (const dish of menu) {
-    const li = document.createElement('li');
-    li.textContent = dish;
-    list.append(li);
-  }
-  menuContainer.append(list);
-};
-
-/**
- * Sorts menu alphapetically
- * @param {Array} menu - Array of dishes
- * @param {string} order - 'asc' or 'desc'
- * @returns sorted menu array
- */
-const sortMenu = (menu, order = 'asc') => {
-  // create a copy of the menu for sorting
-  // don't change the original arrays's order
-  menu = [...menu];
-  menu.sort();
-  if (order === 'desc') {
-    menu.reverse();
-  }
-  return menu;
-};
-
-/**
- * Change UI language
- * @param {string} language
- */
-const changeLanguage = (language) => {
-  if (language === 'fi') {
-    activeMenus[0] = Sodexo.coursesFi;
-    activeMenus[1] = Fazer.coursesFi;
-  } else if (language === 'en') {
-    activeMenus[0] = Sodexo.coursesEn;
-    activeMenus[1] = Fazer.coursesEn;
-  }
-  lang = language;
-  for(const [index, menu]  of activeMenus.entries()){
-    renderMenu(menu, menuContainers[index]);
+      // if the last key is reached, activate cheats
+      if (secretCodePosition == secretCode.length) {
+        activateCheats();
+       secretCodePosition = 0;
+      }
+    } else {
+      secretCodePosition = 0;
     }
+  });
+  function activateCheats() {
+    alert("cheats activated");
+  };
 
-};
+  /* task_1_ii */
 
-/**
- * Get a random dish fron an array
- * @param {Array} menu - Array of dishes
- * @returns random dish item
- */
-const getRandomDish = (menu) => {
-  const randomIndex = Math.floor(Math.random() * menu.length);
-  return menu[randomIndex];
-};
+   document.addEventListener("dblclick", (evt)=>{
+    document.body.textContent =
+      "clientX: " + evt.clientX +
+      " - clientY: " + evt.clientY;
+  });
 
-/**
- * Buttons & event handlers
- */
-const sortButton = document.querySelector('#sort-button');
-sortButton.addEventListener('click', () => {
-  renderMenu(sortMenu(activeMenus[0]));
-});
-const langButton = document.querySelector('#lang-button');
-langButton.addEventListener('click', () => {
-  if (lang === 'fi') {
-    changeLanguage('en');
-  } else {
-    changeLanguage('fi');
-  }
-});
-const randButton = document.querySelector('#rand-button');
-randButton.addEventListener('click', () => {
-  alert(getRandomDish(activeMenus[0]));
+/* task_1_iii */
+const el = document.querySelectorAll('div');
+el[2].addEventListener('mouseenter', ()=> {
+ console.log(1234566);
 });
 
-/**
- * App initaliazation
- */
-const init = () => {
-  activeMenus = [Sodexo.coursesFi, Fazer.coursesFi];
-  menuContainers = document.querySelectorAll('.menu-container');
-  for(const [index, menu]  of activeMenus.entries()){
-  renderMenu(menu, menuContainers[index]);
-  }
-};
-init();
+/* task_1_iiii */
+setTimeout(() => document.body.textContent = "hurry up", 15000);
+
+/* task_1_iiiii */
