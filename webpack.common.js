@@ -9,7 +9,7 @@ module.exports = {
     app: './src/index.js',
   },
   plugins: [
-    
+
     new CopyPlugin({
       patterns: [
       {
