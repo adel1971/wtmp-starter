@@ -1,6 +1,6 @@
 
-import Sodexo from "./modules/sodexo-data";
-import Fazer from "./modules/fazer-data";
+import Sodexo from './modules/sodexo-data';
+import Fazer from './modules/fazer-data';
 
 // Global variables
 let lang = 'fi';
@@ -103,7 +103,7 @@ const init = () => {
 init();
 // TODO: warp to function / move to seprate module
 // eslint-disable-next-line no-undef
-if (APP_CONF.productionMade && 'serviceWorker' in navigator) {
+if (APP_CONF.productionMode && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(registration => {
       console.log('SW registered: ', registration);
