@@ -17,16 +17,14 @@ const restaurants = [
 ];
 
 const saveSetting = () => {
-const setting = {};
-setting.restaurants = restaurants;
-setting.darkmode = true;
-localStorage.setItem('settings', JSON.stringify(setting));
+  const setting = {};
+  setting.restaurants = restaurants;
+  setting.darkmode = true;
+  localStorage.setItem('settings', JSON.stringify(setting));
 };
 saveSetting();
 
-const loadSettings = () => {
-
-};
+const loadSettings = () => {};
 
 /**
  * Renders menu content to html page
@@ -47,7 +45,7 @@ const renderMenu = (menu, targetElem) => {
 
 const renderAllMenus = async () => {
   const menuWrapper = document.querySelector('#menu-wrapper');
-  menuWrapper.innerHTML= '';
+  menuWrapper.innerHTML = '';
   for (const restaurant of restaurants) {
     let menu;
     if (restaurant.type === 'sodexo') {
