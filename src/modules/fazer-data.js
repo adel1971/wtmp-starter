@@ -7,7 +7,7 @@
 import {doFetch} from './network';
 
 const weeklyUrl =
-  'https://www.compass-group.fi/menuapi/feed/json?costNumber=3208&language=';
+  'https://www.compass-group.fi/menuapi/feed/json?costNumber=';
 
 /**
  * Gets today's menu from Fazer API
@@ -15,9 +15,9 @@ const weeklyUrl =
  * @param {string} lang - menu language 'fi'/'en'
  * @returns Menu array
  */
-const getDailyMenu = async (lang) => {
+const getDailyMenu = async (restaurantId, lang) => {
   try {
-    const weeklyMenu = await doFetch(weeklyUrl + lang, true);
+    const weeklyMenu = await doFetch(`${weeklyUrl} ${restaurantId}&language=${lang}`, true);
     console.log('fazer menu', weeklyMenu);
     const courses = weeklyMenu.MenusForDays[0].SetMenus.map(
       (menuItem) => {
@@ -32,18 +32,3 @@ const getDailyMenu = async (lang) => {
 
 const Fazer = {getDailyMenu};
 export default Fazer;
-
-  /* import MenuFi from  '../mock-data/fazer-week-example.json';
-import MenuEn from  '../mock-data/fazer-week-example-en.json';
-
-const coursesFi = MenuFi.MenusForDays[0].SetMenus.map((menuItem) => {
- return menuItem.Components.join(',');
-});
-const coursesEn = MenuEn.MenusForDays[0].SetMenus.map((menuItem) => {
- return menuItem.Components.join(',');
-});
-console.log(coursesFi);
-
-const Fazer = {coursesEn,coursesFi};
-export default Fazer;
- */

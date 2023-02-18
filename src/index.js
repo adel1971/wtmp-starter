@@ -10,16 +10,32 @@ import Fazer from './modules/fazer-data';
 
 // Global variables
 let lang = 'fi';
-let menuContainers = [];
-let activeMenus = [];
+const restaurants = [
+  {name: 'Myrtsi', id: 152, type: 'sodexo'},
+  {name: 'Myllypuro', id: 158, type: 'sodexo'},
+  {name: 'Karaportti', id: 3208, type: 'fazer'},
+];
+
+const saveSetting = () => {
+const setting = {};
+setting.restaurants = restaurants;
+setting.darkmode = true;
+localStorage.setItem('settings', JSON.stringify(setting));
+};
+saveSetting();
+
+const loadSettings = () => {
+
+};
 
 /**
  * Renders menu content to html page
  * @param {Array} menu - array of dishes
  */
 const renderMenu = (menu, targetElem) => {
-  const menuContainer = targetElem;
-  menuContainer.innerHTML = '';
+  const menuContainer = document.createElement('div');
+  menuContainer.classList = 'menu-container';
+  targetElem.append(menuContainer);
   const list = document.createElement('ul');
   for (const dish of menu) {
     const li = document.createElement('li');
@@ -29,19 +45,27 @@ const renderMenu = (menu, targetElem) => {
   menuContainer.append(list);
 };
 
+const renderAllMenus = async () => {
+  const menuWrapper = document.querySelector('#menu-wrapper');
+  menuWrapper.innerHTML= '';
+  for (const restaurant of restaurants) {
+    let menu;
+    if (restaurant.type === 'sodexo') {
+      menu = await Sodexo.getDailyMenu(restaurant.id, lang);
+    } else if (restaurant.type === 'fazer') {
+      menu = await Fazer.getDailyMenu(restaurant.id, lang);
+    }
+    renderMenu(menu, menuWrapper);
+  }
+};
+
 /**
  * Change UI language
  * @param {string} language
  */
 const changeLanguage = async (language) => {
-   activeMenus[1] = await Fazer.getDailyMenu(language);
-  activeMenus[0] = await Sodexo.getDailyMenu(language);
-
   lang = language;
-  // TODO: implement & use generic renderAll() function??
-  for (const [index, menu] of activeMenus.entries()) {
-    renderMenu(menu, menuContainers[index]);
-  }
+  renderAllMenus();
 };
 
 /**
@@ -59,12 +83,9 @@ langButton.addEventListener('click', () => {
 /**
  * App initalization
  */
-const init = async () => {
-  activeMenus = [await Sodexo.getDailyMenu(lang), await Fazer.getDailyMenu(lang)];
-  menuContainers = document.querySelectorAll('.menu-container');
-  for (const [index, menu] of activeMenus.entries()) {
-    renderMenu(menu, menuContainers[index]);
-  }
+const init = () => {
+  loadSettings();
+  renderAllMenus();
 };
 init();
 
@@ -72,10 +93,13 @@ init();
 // eslint-disable-next-line no-undef
 if (APP_CONF.productionMode && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').then(registration => {
-      console.log('SW registered: ', registration);
-    }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError);
-    });
+    navigator.serviceWorker
+      .register('./service-worker.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
   });
 }
